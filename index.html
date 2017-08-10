@@ -23,7 +23,7 @@
         <div class="products">
             <div class="product" v-for="(myItem, myIndex) in items">
                 <h4 class="product-title">{{ myItem.title }}</h4>
-                <button v-on:click="addItem(myIndex)" class="add-to-cart">Add to cart</button>
+                <button v-on:click="addItem(myIndex)" class="add-to-cart btn">Add to cart</button>
             </div>
         </div>
         <div class="cart">
@@ -36,13 +36,15 @@
                                 v-for="cartItem in cartItems"><div class="item-title">
                         {{ cartItem.title }}
                     </div>
-                            <span class="item-qty">{{ cartItem.qty }}</span>
+                            <span class="item-qty">Price: {{ cartItem.price | currency }} x {{ cartItem.qty }}</span>
+                            <button class="btn" v-on:click="inc(cartItem)">+</button>
+                            <button class="btn" v-on:click="dec(cartItem)">-</button>
                         </li>
                     </ul>
                 </div>
                 <!-- 0 length, empty cart, do not show div -->
                 <div v-if="cartItems.length">
-                    Total: {{ total }}
+                    Total: {{ total | currency }}
                 </div>
                 <div v-else class="empty-cart">
                     No items in cart.
