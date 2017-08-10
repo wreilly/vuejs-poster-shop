@@ -21,13 +21,21 @@
     </div>
     <div class="main">
         <div class="products">
-            <button v-on:click="addItem">Add to cart</button>
+            <div class="product" v-for="myItem in items">
+                <h4 class="product-title">{{ myItem.title }}</h4>
+                <button v-on:click="addItem(myItem)" class="add-to-cart">Add to cart</button>
+            </div>
         </div>
         <div class="cart">
             <h2>Shopping Cart</h2>
             <div>
                 <div>
                     Total: {{ total }}
+                </div>
+                <div>
+                    <ul>
+                        <li v-for="cartItem in cartItems">{{ cartItem.title }}</li>
+                    </ul>
                 </div>
             </div>
         </div>
