@@ -35,7 +35,9 @@
                                 class="cart-item"
                                 v-for="cartItem in cartItems"><div class="item-title">
                         {{ cartItem.title }}
-                    </div></li>
+                    </div>
+                            <span class="item-qty">{{ cartItem.qty }}</span>
+                        </li>
                     </ul>
                 </div>
                 <!-- 0 length, empty cart, do not show div -->
