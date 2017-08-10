@@ -10,9 +10,9 @@ new Vue({
         cartItems: [] // empty to begin
     },
     methods: {
-        addItem: function(passedInMyItem) {
-            console.log('We got: ', passedInMyItem.title)
-            this.cartItems.push(passedInMyItem)
+        addItem: function(passedInMyIndex) {
+            console.log('We got: ', this.items[passedInMyIndex].title)
+            this.cartItems.push(this.items[passedInMyIndex])
             this.total += 9.99
             console.log('in addItem this.total post ', this.total)
         }
