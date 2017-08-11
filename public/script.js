@@ -9,9 +9,23 @@ new Vue({
             { id: 2, title: 'Item 2' },
             { id: 3, title: 'Item 3' }
         ],
-        cartItems: [] // empty to begin. qty, price additional properties in the cart.
+        cartItems: [], // empty to begin. qty, price additional properties in the cart.
+        search: ''
     },
     methods: {
+        onSubmit: function (eventPassed) {
+            eventPassed.preventDefault()
+
+            console.log('onSubmit submitted, and this.search is ', this.search)
+
+            // console.log(this.$http)
+
+            this.$http
+                .get('/search/'.concat('90s'))
+                .then(function(response) {
+                console.log(response)
+                })
+        },
         inc: function(cartItem) {
             console.log('inc ? cartItem, cartItem.qty ', cartItem, cartItem.qty)
           cartItem.qty += 1

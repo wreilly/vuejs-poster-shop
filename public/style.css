@@ -85,6 +85,17 @@ h1 {
     text-shadow: black 2px 1px 1px;
 }
 
+h3 {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 1.0rem;
+    padding: 2rem 0 1rem;
+    margin: 0;
+    color: #FFAFAF;
+    text-shadow: black 2px 1px 1px;
+}
+
+
+
 .searchbar {
     flex: 0 0 auto;
     padding: 1rem 0;

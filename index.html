@@ -17,7 +17,19 @@
 <body>
 <div id="app">
     <div class="header">
-        <h1>WR__ Vue.js Poster Store</h1>
+        <h3>WR__ Vue.js Poster Store</h3>
+        <!--  Notes:
+        1) In lieu of submit.prevent here, used event.preventDefault() over in onSubmit() method.
+        2) In lieu of v-model, used v-bind:value and v-on:input
+       -->
+        <form class="searchbar" v-on:submit="onSubmit">
+            <input
+                    type="text"
+                    placeholder="Search a thing"
+            v-bind:value="search"
+            v-on:input="search = $event.target.value">
+            <input type="submit" value="Search imgurs" class="btn">
+        </form>
     </div>
     <div class="main">
         <div class="products">
@@ -57,6 +69,7 @@
 <!-- Scripts -->
 <script src="/reload/reload.js"></script>
 <script src="node_modules/vue/dist/vue.js"></script>
+<script src="node_modules/vue-resource/dist/vue-resource.js"></script>
 <script type="text/javascript" src="public/script.js"></script>
 
 </body>
