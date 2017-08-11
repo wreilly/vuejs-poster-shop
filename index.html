@@ -26,16 +26,24 @@
             <input
                     type="text"
                     placeholder="Search a thing"
-            v-bind:value="search"
-            v-on:input="search = $event.target.value">
+            v-bind:value="newSearch"
+            v-on:input="newSearch = $event.target.value">
             <input type="submit" value="Search imgurs" class="btn">
         </form>
     </div>
+    <div class="search-results" v-if="searchCount">Found  {{ searchCount }} Search Results for {{ lastSearch }}.</div>
     <div class="main">
         <div class="products">
             <div class="product" v-for="(myItem, myIndex) in items">
-                <h4 class="product-title">{{ myItem.title }}</h4>
-                <button v-on:click="addItem(myIndex)" class="add-to-cart btn">Add to cart</button>
+                <div>
+                    <div class="product-image">
+                        <a v-bind:href="myItem.link" target="_blank"><img v-bind:src="myItem.link" style="border: 0;" /></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="product-title">{{ myItem.title }}</h4>
+                    <button v-on:click="addItem(myIndex)" class="add-to-cart btn">Add to cart</button>
+                </div>
             </div>
         </div>
         <div class="cart">
@@ -45,9 +53,9 @@
                     <ul>
                         <li
                                 class="cart-item"
-                                v-for="cartItem in cartItems"><div class="item-title">
-                        {{ cartItem.title }}
-                    </div>
+                                v-for="cartItem in cartItems">
+                            <div class="item-title">{{ cartItem.title }}
+                            </div>
                             <span class="item-qty">Price: {{ cartItem.price | currency }} x {{ cartItem.qty }}</span>
                             <button class="btn" v-on:click="inc(cartItem)">+</button>
                             <button class="btn" v-on:click="dec(cartItem)">-</button>
