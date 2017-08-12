@@ -15,7 +15,8 @@ new Vue({
         newSearch: 'Italia', // Default Search!
         lastSearch: '',
         searchCount: 0,
-        loading: false // true << Nope. default to handle INITIAL case (First page load)
+        loading: false, // true << Nope. default to handle INITIAL case (First page load)
+        price: PRICE
     },
     methods: {
         onSubmit: function (eventPassed) {
@@ -27,9 +28,10 @@ new Vue({
 Just for fun, use old fashioned event object preventDefault() here in the invoked method.
 (Rather than using Vue.js's ".prevent" available over on the template directive, as in:  v-on:submit.prevent)
  */
-            eventPassed.preventDefault()
+            // eventPassed.preventDefault()
 
             console.log('onSubmit submitted, and this.newSearch is ', this.newSearch)
+            console.log('onSubmit submitted, and eventPassed is ', eventPassed)
 
             // console.log(this.$http)
 
@@ -38,7 +40,8 @@ Just for fun, use old fashioned event object preventDefault() here in the invoke
                 .get('/search/'.concat(this.newSearch))
                 .then(function(response) {
                 console.log(response)
-                    this.items = response.data // Also: response.body
+                // Whamma-jamma:
+                       this.items = response.data // Also: response.body
                     this.searchCount = response.data.length
                     this.lastSearch = this.newSearch
                     console.log('Here is one: ', this.items[1]) /*
@@ -107,6 +110,49 @@ Just for fun, use old fashioned event object preventDefault() here in the invoke
             console.log('in addItem this.total post ', this.total)
         }
     },
+    // ****** LIFECYCLE HOOKS ****
+    beforeCreate: function () {
+        console.log('HOOK -01- beforeCreate')
+        /*
+        Too Early!
+         [Vue warn]: Error in beforeCreate hook: "TypeError: this.onSubmit is not a function"
+         */
+        // this.onSubmit(this.newSearch)
+    },
+    created: function () {
+        console.log('HOOK -02- created')
+        // this.onSubmit(this.newSearch) // << No.
+        // this.onSubmit('Switzerland') // << No.
+        /*
+        Worked okay.
+        Instructor used mounted() but said created() should work too. Okay.
+         */
+        this.onSubmit()
+    },
+    beforeMount: function () {
+        console.log('HOOK -03- beforeMount')
+    },
+    mounted: function () {
+        console.log('HOOK -04- mounted')
+        /*
+        Instructor: Lesson 41
+        Worked. (of course)
+         */
+       // this.onSubmit()
+    },
+    beforeUpdate: function() {
+        console.log('HOOK -05- beforeUpdate')
+    },
+    updated: function () {
+        console.log('HOOK -06- updated')
+    },
+    beforeDestroy: function() {
+        console.log('HOOK -07- beforeDestroy')
+    },
+    destroyed: function () {
+        console.log('HOOK -08- destroyed')
+    },
+    // ****** /LIFECYCLE HOOKS ****
     filters: {
         currency: function(price) {
             return '$'.concat(price.toFixed(2))
