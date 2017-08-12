@@ -240,3 +240,54 @@ h3 {
 .cart ul .cart-item button {
     margin-right: 3px;
 }
+
+/*
+TRANSITIONING Lesson 44 ff.
+ */
+
+.v-enter {
+    opacity: 0
+}
+
+.v-enter-active {
+    transition: opacity .9s
+}
+
+.v-leave-active {
+    opacity: 0
+}
+
+.fade-enter {
+    opacity: 0
+}
+
+.fade-enter-active {
+    transition: opacity .9s
+}
+
+.fade-leave-active {
+    transition: opacity .9s
+}
+
+.fade-leave-active {
+    opacity: 0
+}
+
+.wrfade-enter {
+    opacity: 0
+}
+
+.wrfade-enter-active {
+    transition: opacity .9s
+}
+
+/*.wrfade-leave-active {*/
+    /*transition: opacity .9s*/
+/*}*/
+
+.wrfade-leave-active {
+    opacity: 0
+}
+/*.wrfade-leave {*/
+    /*opacity: 0*/
+/*}*/

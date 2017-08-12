@@ -153,6 +153,7 @@ Just for fun, use old fashioned event object preventDefault() here in the invoke
         console.log('HOOK -08- destroyed')
     },
     // ****** /LIFECYCLE HOOKS ****
+
     filters: {
         currency: function(price) {
             return '$'.concat(price.toFixed(2))

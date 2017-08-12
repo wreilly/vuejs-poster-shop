@@ -73,13 +73,37 @@
                         </li>
                     </ul>
                 </div>
-                <!-- 0 length, empty cart, do not show div -->
-                <div v-if="cartItems.length">
-                    Total: {{ total | currency }}
-                </div>
+                <!-- No. <transition name="wrfade">-->
+                <!--No. ? Ah - needed key etc. Now it DOES WORK <transition>-->
+                    <transition name="fade" mode="out-in">
+                    <!-- Hmm. Q. First time only? A. Ah - Need key.
+                 Read on:
+                 https://forum.vuejs.org/t/solved-vue-transitions-not-working/7614/2
+                 https://vuejs.org/v2/guide/transitions.html#Transitioning-Between-Elements
+                 -->
+<!-- No. Only on first time.
+After that, with static unchanging key, Vue does not run transition on this element - skips for efficiency (per doc page above)
+                     <div v-if="cartItems.length" key="wrfull">
+-->
+                <!-- If 0 length, empty cart, do not show div -->
+                     <!-- YES v-bind to the key to get a new value with each add to the cart. Good! -->
+                    <div v-if="cartItems.length" v-bind:key="cartItems.length">
+                        Total: {{ total | currency }}
+                    </div>
+                     <div v-if="cartItems.length === 0" class="empty-cart" key="wrempty">
+                         No items in cart.
+                     </div>
+                </transition>
+<!-- Owing to (above) <transition> around the v-if, suppressing use of this former sibling v-else.
                 <div v-else class="empty-cart">
                     No items in cart.
                 </div>
+-->
+<!--
+                <div v-if="cartItems.length === 0" class="empty-cart">
+                    No items in cart.
+                </div>
+-->
             </div>
         </div>
     </div>
