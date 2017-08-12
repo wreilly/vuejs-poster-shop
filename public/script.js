@@ -12,12 +12,21 @@ new Vue({
         ],
 */
         cartItems: [], // empty to begin. 'qty', 'price' are additional properties, only in the cart.
-        newSearch: '',
+        newSearch: 'Italia', // Default Search!
         lastSearch: '',
-        searchCount: 0
+        searchCount: 0,
+        loading: false // true << Nope. default to handle INITIAL case (First page load)
     },
     methods: {
         onSubmit: function (eventPassed) {
+            // Dealing with "Loading..."
+            this.items = [] // empty out the page's results contents upon clicking the new search Submit
+            this.loading = true
+
+/*
+Just for fun, use old fashioned event object preventDefault() here in the invoked method.
+(Rather than using Vue.js's ".prevent" available over on the template directive, as in:  v-on:submit.prevent)
+ */
             eventPassed.preventDefault()
 
             console.log('onSubmit submitted, and this.newSearch is ', this.newSearch)
@@ -36,6 +45,7 @@ new Vue({
                      .link: 'http://i.imgur.com/jD7m7oc.jpg'
                      .title: 'A monument to lab rats killed in experiments.'
                      */
+                    this.loading = false
                 })
         },
         inc: function(cartItem) {

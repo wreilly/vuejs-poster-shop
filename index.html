@@ -31,7 +31,16 @@
             <input type="submit" value="Search imgurs" class="btn">
         </form>
     </div>
-    <div class="search-results" v-if="searchCount">Found  {{ searchCount }} Search Results for {{ lastSearch }}.</div>
+    <div v-if="loading">
+        <p>Loading loading loading oh yeah...</p>
+    </div>
+    <!-- No. Needed to nest the else and the subsequent if logic:
+    <div v-else class="search-results" v-if="searchCount">-->
+    <div v-else class="search-results">
+        <div v-if="searchCount">
+            Found  {{ searchCount }} Search Results for {{ lastSearch }}.
+        </div>
+    </div>
     <div class="main">
         <div class="products">
             <div class="product" v-for="(myItem, myIndex) in items">
