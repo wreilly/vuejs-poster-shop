@@ -1,9 +1,11 @@
 var PRICE = 9.99 // const in ES6
+var LOAD_NUM = 5 // 10 // 10 items at a go
 
 new Vue({
     el: '#app',
     data: {
         total: 0,
+        results: [], // ALL search results
         items: [],
 /* bye-bye:
             { id: 1, title: 'Item 1' },
@@ -40,8 +42,14 @@ Just for fun, use old fashioned event object preventDefault() here in the invoke
                 .get('/search/'.concat(this.newSearch))
                 .then(function(response) {
                 console.log(response)
+
                 // Whamma-jamma:
-                       this.items = response.data // Also: response.body
+                    // Lesson 49 ~02:49 LOAD SCROLLING - 10 at a time
+                    this.results = response.data // ALL Search Results
+                    this.items = response.data.slice(0,LOAD_NUM) // FIRST 10 ONLY
+                    // Also: response.body
+
+
                     this.searchCount = response.data.length
                     this.lastSearch = this.newSearch
                     console.log('Here is one: ', this.items[1]) /*
@@ -172,6 +180,25 @@ Just for fun, use old fashioned event object preventDefault() here in the invoke
 
     }
 })
+
+
+// LESSON 50
+// https://github.com/stutrek/scrollMonitor
+var elem = document.getElementById('product-list-bottom')
+var watcher = scrollMonitor.create(elem)
+watcher.enterViewport(function() {
+    console.log('scroll monitor on the scene!')
+})
+
+// console.log(scrollMonitor)
+/*
+ HOOK -04- mounted
+
+ script.js:186
+ t {item: body, watchers: Array(0), viewportTop: 0, viewportBottom: 726, documentHeight: 952, …}
+ DOMListener: ƒ function()contentHeight: 952destroy: ƒ function()documentHeight: 952eventTypes: (7) ["visibilityChange", "enterViewport", "fullyEnterViewport", "exitViewport", "partiallyExitViewport", "locationChange", "stateChange"]item: bodylatestEvent: nullrecalculateLocations: ƒ function()update: ƒ function()viewportBottom: 726viewportHeight: 726viewportTop: 0watchers: []__proto__: Object
+
+ */
 
 /* ***************************
 DATA STUFF FROM IMGUR RESPONSE
