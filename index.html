@@ -57,9 +57,17 @@
                     <button v-on:click="addItem(myIndex)" class="add-to-cart btn">Add to cart</button>
                 </div>
             </div>
-            <!-- Lesson 50 -->
+            <!-- Lesson 50 ff. -->
             <div id="product-list-bottom"
-            style="height: 50px; background-color: blue;"></div>
+            style="height: 50px; background-color: blue;">
+<!-- WR__
+                <div v-if="noMoreItems">We are OUT ("86") of that stuff. (WR__ code way)</div>
+-->
+<!-- Instructor -01- Inline JavaScript
+                <div v-if="items.length === results.length && results.length > 0">No more items (Instructor code -01- way)</div>
+-->
+                <div v-if="noMoreItemsComputed">No more items (Instructor code -02- way - Computed property)</div>
+            </div>
         </div>
 
         <div class="cart">

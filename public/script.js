@@ -13,6 +13,14 @@ new Vue({
             { id: 3, title: 'Item 3' }
         ],
 */
+        noMoreItems: false, // no more search results ... bottom of scrolling
+        /*
+        Instructor code:  Lesson 55 ~02:50
+        This code goes in the HTML v-if="" directive, actually.
+        You then don't need any data property here in the JavaScript...
+    1.      items.length === results.length // << ALL results now onto items = DONE = No More
+    2.      items.length === results.length && results.length > 0 // << to avoid the initial case where both are 0
+         */
         cartItems: [], // empty to begin. 'qty', 'price' are additional properties, only in the cart.
         newSearch: 'Italia', // Default Search!
         lastSearch: '',
@@ -20,7 +28,30 @@ new Vue({
         loading: false, // true << Nope. default to handle INITIAL case (First page load)
         price: PRICE
     },
+    computed: {
+      noMoreItemsComputed: function() {
+          return this.items.length === this.results.length && this.results.length > 0
+      }
+    },
     methods: {
+        appendItems: function () {
+          // LESSON 51 LOAD_NUM more...
+            console.log('append away 10')
+            if (this.items.length < this.results.length) {
+                // More to go...
+                var appendNext = this.results.slice(this.items.length, this.items.length + LOAD_NUM)
+                this.items = this.items.concat(appendNext)
+            } else {
+                // No more to go!
+
+                // Instructor code: He just doesn't address this "else" condition at all.
+                // Dealt with elsewhere: computed property for noMoreItemsComputed instead. Cleaner (seems ta be)
+
+                // Actually: this 'else' condition will be seen upon "mounted()" - Not that big a deal... (I guess)
+                console.log('appendItems: No more to go!')
+                // this.noMoreItems = true // ! << Not using anymore
+            }
+        },
         onSubmit: function (eventPassed) {
             // Dealing with "Loading..."
             this.items = [] // empty out the page's results contents upon clicking the new search Submit
@@ -46,7 +77,9 @@ Just for fun, use old fashioned event object preventDefault() here in the invoke
                 // Whamma-jamma:
                     // Lesson 49 ~02:49 LOAD SCROLLING - 10 at a time
                     this.results = response.data // ALL Search Results
-                    this.items = response.data.slice(0,LOAD_NUM) // FIRST 10 ONLY
+                    // Now use appendItems() even for initial 10:
+                    this.appendItems()
+                    // this.items = response.data.slice(0,LOAD_NUM) // FIRST 10 ONLY
                     // Also: response.body
 
 
@@ -146,7 +179,52 @@ Just for fun, use old fashioned event object preventDefault() here in the invoke
         Instructor: Lesson 41
         Worked. (of course)
          */
+        /* N.B. The 'this' here, inside mounted(), is of course the Vue instance! :o)
+        See below re: Lesson 51...
+         */
        // this.onSubmit()
+
+        // Yes, up here:
+        var myVueThis = this // << presto change-o
+        console.log('myVueThis up in mounted() ', myVueThis)
+/*
+ myVueThis up in mounted()  Vue$3 {_uid: 0, _isVue: true, $options: {…}, _renderProxy: Proxy, _self: Vue$3, …}$attrs: (...)
+ */
+
+        // LESSON 50
+// https://github.com/stutrek/scrollMonitor
+// LESSON 51
+        /* We initially placed this code BELOW / OUTSIDE OF the Vue instance ...
+         Time to move it INSIDE (to mounted())
+
+         Also - because scrollMonitor is a 3rd party JavaScript library that is *NOT* integrating with Vue.js per se, we must carefully treat the 'this' variable.
+         'this' is usually the Vue instance, but inside of scrollMonitor's "watcher" the 'this' is that watcher.
+         So we do the "this onto that" little sleight of hand and presto change-o, we are ALL SET:
+         */
+        var elem = document.getElementById('product-list-bottom')
+        var watcher = scrollMonitor.create(elem)
+        watcher.enterViewport(function() {
+            // console.log('scroll monitor on the scene!') // << Yep.
+            // Now time to DO something!
+            // Hmm. No, not down in here:
+            // var myThis = this
+            // console.log('myThis! ', myThis)
+
+            console.log('this in watcher callback? ', this)
+            /*
+             this in watcher callback?
+             o {watchItem: div#product-list-bottom, container: t, offsets: {…}, callbacks: {…}, locked:
+             */
+
+
+            // this.appendItems() // NOPE append LOAD_NUM more ...
+            /* Note: The next line does get executed upon mounting, EVEN THOUGH (in my humble opinion) our Element at that particular moment is NOT "in the Viewport". Eh - what do I know. Maybe it is... */
+            myVueThis.appendItems() // Yep
+        })
+
+
+
+
     },
     beforeUpdate: function() {
         console.log('HOOK -05- beforeUpdate')
@@ -181,14 +259,6 @@ Just for fun, use old fashioned event object preventDefault() here in the invoke
     }
 })
 
-
-// LESSON 50
-// https://github.com/stutrek/scrollMonitor
-var elem = document.getElementById('product-list-bottom')
-var watcher = scrollMonitor.create(elem)
-watcher.enterViewport(function() {
-    console.log('scroll monitor on the scene!')
-})
 
 // console.log(scrollMonitor)
 /*
