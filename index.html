@@ -15,7 +15,9 @@
     <link rel="stylesheet" type="text/css" href="public/style.css">
 </head>
 <body>
-<div id="app">
+
+<!-- Lesson 57 -->
+<div id="app" v-cloak>
     <div class="header">
         <h3>WR__ Vue.js Poster Store</h3>
         <!--  Notes:
@@ -43,6 +45,7 @@
                 <div v-if="searchCount">
                     Found  {{ searchCount }} Search Results for {{ lastSearch }}.
                 </div>
+                <div v-else>No results! (solly!)</div>
             </div>
 
             <div class="product" v-for="(myItem, myIndex) in items">

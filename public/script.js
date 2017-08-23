@@ -53,20 +53,81 @@ new Vue({
             }
         },
         onSubmit: function (eventPassed) {
-            // Dealing with "Loading..."
-            this.items = [] // empty out the page's results contents upon clicking the new search Submit
-            this.loading = true
+            /* Lesson 59
+            Instructor code: v. simple:
+             Just checks this.newSearch.length
+             if (this.newSearch.length) {
+               // we're good. code goes here...
+             } else {
+               // we do (Absolutely) nothing
+             }
 
-/*
-Just for fun, use old fashioned event object preventDefault() here in the invoked method.
-(Rather than using Vue.js's ".prevent" available over on the template directive, as in:  v-on:submit.prevent)
- */
+             WR__ code: I did a LOT more. Cheers.
+             */
+            // Dealing with "Loading..."
+            // this.loading = true // Move below re: logic to check search term is NOT EMPTY
+            this.items = [] // empty out the page's results contents upon clicking the new search Submit
+
+            /*
+             Just for fun, (we used) old fashioned event object preventDefault() here in the invoked method.
+             (Rather than using Vue.js's ".prevent" available over on the template directive, as in:  v-on:submit.prevent)
+             */
             // eventPassed.preventDefault()
 
             console.log('onSubmit submitted, and this.newSearch is ', this.newSearch)
-            console.log('onSubmit submitted, and eventPassed is ', eventPassed)
+            if (!eventPassed) {
+                // First time page load, we fire onSubmit() but with no actual Event ...
+                // Just to get initial search results
+                // using initial this.newSearch  ("Italia")
 
-            // console.log(this.$http)
+                this.loading = true
+
+                // Actually, just run it, no param
+                // Why? It simply references known var.
+                // myHttpGet(this.newSearch)
+                this.myHttpGet() // << will be "Italia" first time
+            } else {
+                // All other times, comes with Event from the Form:
+                console.log('onSubmit submitted, and eventPassed is ', eventPassed)
+                // eventPassed.target is the <form> element entire
+                /*
+                NOTE: Kinda lucky I found this, in the L-O-O-O-N-G list of nested properties on the Event object.  >> .target[0].value <<
+                Sheesh.
+                 */
+                // eventPassed.target["0"].value is the search term! (e.g. "Italiana")
+                // Weird: .target["0"] << wtf ??
+                console.log('onSubmit submitted, and eventPassed.target["0"].value is ', eventPassed.target["0"].value)
+                // O.K. to drop the double-quotes
+                // (why "" work is the big Q.)
+                console.log('onSubmit submitted, and eventPassed.target[0].value is ', eventPassed.target[0].value)
+
+                // Mo' stuff: Not woikin'!
+                // https://stackoverflow.com/questions/43754906/event-target-value-not-retrieving-value-properly
+                console.log('onSubmit submitted, and eventPassed.target.getAttribute(\'value\') is ', eventPassed.target.getAttribute('value')) // null !?
+                console.log('onSubmit submitted, and eventPassed.target[0].getAttribute(\'value\') is ', eventPassed.target[0].getAttribute('value')) // also null !?
+
+                // Ensure search string NOT EMPTY
+                if (!eventPassed.target[0].value) {
+                    // BAD
+                    // Q. Hmm, if we "do nothing," is that O.K. UX? We'll see.
+                    // A. No!
+                    this.results = [] // Empty out current search
+                    // this.items = [] // Better empty 'em both, kid
+                    this.searchCount = 0 // reset!
+                } else {
+                    // OK
+                    this.loading = true
+                    this.newSearch = eventPassed.target[0].value
+                    // Actually, just run it, no param
+                    // Why? It simply references known var.
+                    // myHttpGet(this.newSearch)
+                    this.myHttpGet() // << will be whatever user entered, subsequenttimes
+
+                }
+
+            }
+        },
+        myHttpGet: function() {
 
             this.$http
                 // .get('/search/'.concat('Alighieri'))
@@ -165,7 +226,7 @@ Just for fun, use old fashioned event object preventDefault() here in the invoke
         // this.onSubmit(this.newSearch) // << No.
         // this.onSubmit('Switzerland') // << No.
         /*
-        Worked okay.
+        Worked okay. (below)
         Instructor used mounted() but said created() should work too. Okay.
          */
         this.onSubmit()
